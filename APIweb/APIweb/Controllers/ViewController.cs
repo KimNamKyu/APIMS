@@ -10,13 +10,13 @@ namespace APIweb.Controllers
     {
         [Route("api/Views")]
         [HttpGet]
-        public ArrayList Views()
+        public ArrayList Views()    
         {
             ArrayList list = new ArrayList();
-
-            Database db = new Database(DataBaseInfo.TestDBInfo());
-            Hashtable resultMap = db.GetReader("select rNo, rName, rDesc from [Rule];");
-            string result = "";
+            ArrayList resultList = null;
+            
+            Database db = new Database(DataBaseInfo.RealDBInfo());      // 실제 RealDBInfo로 바꾸면 됨.
+            Hashtable resultMap = db.GetReader("select bNo, bTitle, bContents from [Board];"); // 쿼리만 가변적으로 바뀌면 가능!
 
             if (Convert.ToInt32(resultMap["MsgCode"]) == -1)
             {
@@ -24,19 +24,15 @@ namespace APIweb.Controllers
             }
             else
             {
-                ArrayList resultList = (ArrayList)resultMap["Data"];
-                //foreach (string[] row in resultList)
+                 resultList = (ArrayList)resultMap["Data"];
+                
+                //foreach (var row in resultList)
                 //{
-                //    result += string.Format("rNo : {0}, rName : {1}, rDesc : {2}", row[0], row[1], row[2]);
+                //    list.Add(row);
                 //}
-                foreach (var row in resultList)
-                {
-                    list.Add(row);
-                    //list.Add( row["rNo"].ToString(),row["rName"].ToString(), row["rDesc"].ToString());
-                }
                 
             }
-            return list;
+            return resultList;
         }
     }
 }
